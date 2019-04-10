@@ -11,8 +11,8 @@ import ListView from './ListView';
 AppRegistry.registerComponent(appName, () => App);
 
 export function registerScreens() {
-  Navigation.registerComponent(`navigation.playground.WelcomeScreen`, () => App);
-  Navigation.registerComponent(`navigation.playground.ListView`, () => ListView);
+  Navigation.registerComponent(`MapView`, () => App);
+  Navigation.registerComponent(`ListView`, () => ListView);
 }
 
 registerScreens();
@@ -24,12 +24,7 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  name: "navigation.playground.WelcomeScreen",
-                }
-              },
-              {
-                component: {
-                  name: "navigation.playground.ListView",
+                  name: "MapView",
                 }
               }
             ]

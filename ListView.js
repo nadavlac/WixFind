@@ -38,7 +38,21 @@ export default class ListView extends Component<Props> {
           onPress={() => {
             console.log('ON PRESS LIST VIEW', Navigation)
             // Navigation.pop(this.props.componentId);
-            Navigation.push(this.props.componentId, )
+            Navigation.push(this.props.componentId, {
+              component: {
+                name: 'ListView',
+                passProps: {
+                  text: 'Some props that we are passing'
+                },
+                options: {
+                  topBar: {
+                    title: {
+                      text: 'Post1'
+                    }
+                  }
+                }
+              }
+            });
           }}
         >
           <View style={{padding: 10}}>

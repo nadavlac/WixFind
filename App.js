@@ -64,15 +64,15 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
-        {/*<Text onPress={() => Navigation.push('navigation.playground.ListView')}>press me</Text>*/}
+      <SafeAreaView style={styles.container}>
+        {/*<Text onPress={() => Navigation.push('ListView')}>press me</Text>*/}
         <TouchableOpacity
           style={{backgroundColor: '#FBB'}}
           onPress={() => {
             console.log('ON PRESS', Navigation)
             Navigation.push(this.props.componentId, {
               component: {
-                name: 'navigation.playground.ListView',
+                name: 'ListView',
               }
             }).then(() => {
                 console.log('success?')
@@ -84,28 +84,28 @@ export default class App extends Component<Props> {
           </View>
 
         </TouchableOpacity>
-         {/*<MapView*/}
-          {/*// provider={PROVIDER_GOOGLE} // remove if not using Google Maps*/}
-          {/*style={styles.map}*/}
-          {/*// region={{*/}
-          {/*//   latitude: 37.78825,*/}
-          {/*//   longitude: -122.4324,*/}
-          {/*//   latitudeDelta: 0.015,*/}
-          {/*//   longitudeDelta: 0.0121,*/}
-          {/*// }}*/}
-         {/*>*/}
-           {/*{businesses.map((busi, i) => (*/}
-             {/*<Marker*/}
-               {/*key={i}*/}
-               {/*coordinate={{latitude: busi.latitude, longitude: busi.longitude}}*/}
-             {/*>*/}
-               {/*<Callout>*/}
-                 {/*{this.renderCallout(busi)}*/}
-               {/*</Callout>*/}
-             {/*</Marker>*/}
-           {/*))}*/}
-         {/*</MapView>*/}
-      </View>
+         <MapView
+          // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={styles.map}
+          // region={{
+          //   latitude: 37.78825,
+          //   longitude: -122.4324,
+          //   latitudeDelta: 0.015,
+          //   longitudeDelta: 0.0121,
+          // }}
+         >
+           {businesses.map((busi, i) => (
+             <Marker
+               key={i}
+               coordinate={{latitude: busi.latitude, longitude: busi.longitude}}
+             >
+               <Callout>
+                 {this.renderCallout(busi)}
+               </Callout>
+             </Marker>
+           ))}
+         </MapView>
+      </SafeAreaView>
     );
   }
 }
