@@ -5,10 +5,10 @@ import {Platform, StyleSheet, View, TouchableOpacity, Linking, Image} from 'reac
 import {Typography, Colors, Text} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
 
-const businesses = require('./businessesData');
+// const businesses = require('./businessesData');
 
 
-export default class ListView extends Component<Props> {
+export default class Home extends Component<Props> {
 
   constructor(props){
     super(props);
@@ -16,17 +16,7 @@ export default class ListView extends Component<Props> {
     this.state = {
 
     }
-    // this.renderCallout = this.renderCallout.bind(this)
   }
-
-  // renderCallout(busi) {
-  //   return (
-  //     <TouchableOpacity onPress={() => Linking.openURL(busi.siteUrl)}>
-  //       <Text>{busi.name}</Text>
-  //       {/*<Image source={{uri: `https://static.wixstatic.com/media/${busi.logoUrl}`}} style={{width: 20, height:20}}/>*/}
-  //     </TouchableOpacity>
-  //   )
-  // }
 
   render() {
     return (

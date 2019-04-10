@@ -14,7 +14,7 @@ import {Typography, Colors} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
 
 
-const businesses = require('./businessesData');
+const businesses = require('../../businessesData.json');
 
 
 const instructions = Platform.select({
