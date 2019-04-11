@@ -4,7 +4,7 @@ const businesses = require('../../assets/businessesData.json');
 export const DISTANCE_RADIUS = 2100
 const SEARCH_PADDING = 0.22
 
-function getLocation() {
+export function getLocation() {
   return new Promise(resolve => {
     navigator.geolocation.getCurrentPosition(
       (position) => resolve(position),
