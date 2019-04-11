@@ -7,9 +7,10 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableOpacity, Linking, Image, SafeAreaView, Text} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Linking, Image, SafeAreaView} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { Marker, Callout } from 'react-native-maps';
+import { Marker} from 'react-native-maps';
+import {Text} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
 import * as helpers from '../helpers'
 
@@ -31,22 +32,28 @@ export default class MapScreen extends Component {
 
   render() {
     console.log('in map screen ')
+    const {business} = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <MapView
           // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
           initialRegion={{
-            latitude: this.props.business.latitude,
-            longitude: this.props.business.longitude,
+            latitude: business.latitude,
+            longitude: business.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
           >
             <Marker
-              coordinate={{latitude: this.props.business.latitude, longitude:this.props.business.longitude}}
+              coordinate={{latitude: business.latitude, longitude:business.longitude}}
             />
         </MapView>
+        <View column>
+          <Text dark10 text50 style={{marginLeft: 10, marginRight: 10, marginBottom: 6, marginTop: 10, fontWeight: '500'}} numberOfLines={1}>{business.name}</Text>
+          <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{business.addressString}</Text>
+          <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{`${this.props.service.distanceFromUser.toFixed(2)} KM`}</Text>
+        </View>
       </SafeAreaView>
     );
   }
@@ -54,12 +61,11 @@ export default class MapScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    width: '100%',
     height: 200
   }
 });
