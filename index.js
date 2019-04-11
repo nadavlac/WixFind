@@ -26,7 +26,7 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  name: "MapView",
+                  name: "Home",
                 }
               }
             ]

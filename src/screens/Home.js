@@ -1,54 +1,60 @@
 
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, View, TouchableOpacity, Linking, Image} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import {Typography, Colors, Text} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
+import * as helpers from '../helpers'
 
-// const businesses = require('./businessesData');
-
-
-export default class Home extends Component<Props> {
+export default class Home extends Component {
 
   constructor(props){
     super(props);
 
     this.state = {
-
+      searchValue: ''
     }
+
+    this.handleChangeText = this.handleChangeText.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
+  }
+
+  handleChangeText(searchValue) {
+    this.setState({searchValue})
+  }
+
+  async handleSearch() {
+    if (this.state.searchValue.length <= 3) {
+      return
+    } 
+    const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue)
+    Navigation.push(this.props.componentId, {
+      component: {
+        name: 'MapView',
+        passProps: {
+          businesses,
+          coords
+        },
+        options: {
+          topBar: {
+            title: {
+              text: 'Map View'
+            }
+          }
+        }
+      }
+    });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>bla bla</Text>
-
-        <TouchableOpacity
-          style={{backgroundColor: '#FBB'}}
-          onPress={() => {
-            console.log('ON PRESS LIST VIEW', Navigation)
-            // Navigation.pop(this.props.componentId);
-            Navigation.push(this.props.componentId, {
-              component: {
-                name: 'ListView',
-                passProps: {
-                  text: 'Some props that we are passing'
-                },
-                options: {
-                  topBar: {
-                    title: {
-                      text: 'Post1'
-                    }
-                  }
-                }
-              }
-            });
-          }}
-        >
-          <View style={{padding: 10}}>
-            <Text>press me</Text>
-          </View>
-
+        <TextInput 
+          onChangeText={this.handleChangeText}
+          style={{backgroundColor: '#FBB', paddingVertical: 10}}
+        />
+        <TouchableOpacity onPress={this.handleSearch}>
+          <Text>Search</Text>
         </TouchableOpacity>
       </View>
     );
@@ -57,9 +63,6 @@ export default class Home extends Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject
+    flex: 1
   }
 });

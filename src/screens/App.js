@@ -12,9 +12,9 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker, Callout } from 'react-native-maps';
 import {Typography, Colors} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
+import * as helpers from '../helpers'
 
-
-const businesses = require('../../businessesData.json');
+// const businesses = require('../../businessesData.json');
 
 
 const instructions = Platform.select({
@@ -41,9 +41,10 @@ export default class App extends Component<Props> {
     super(props);
 
     this.state = {
-
+      region: helpers.getRegionForFilteredBusinesses(this.props.businesses)
     }
     this.renderCallout = this.renderCallout.bind(this)
+    this.handleRegionChangeComplete = this.handleRegionChangeComplete.bind(this)
   }
 
   componentDidMount() {
@@ -60,6 +61,11 @@ export default class App extends Component<Props> {
         {/*<Image source={{uri: `https://static.wixstatic.com/media/${busi.logoUrl}`}} style={{width: 20, height:20}}/>*/}
       </TouchableOpacity>
     )
+  }
+
+  handleRegionChangeComplete(region) {
+    console.log('handleRegionChangeComplete region', region)
+    this.setState({region: helpers.getRegionForFilteredBusinesses(this.props.businesses)})
   }
 
   render() {
@@ -87,14 +93,10 @@ export default class App extends Component<Props> {
          <MapView
           // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
-          // region={{
-          //   latitude: 37.78825,
-          //   longitude: -122.4324,
-          //   latitudeDelta: 0.015,
-          //   longitudeDelta: 0.0121,
-          // }}
+          region={this.state.region}
+          onRegionChangeComplete={this.handleRegionChangeComplete}
          >
-           {businesses.map((busi, i) => (
+           {this.props.businesses.map((busi, i) => (
              <Marker
                key={i}
                coordinate={{latitude: busi.latitude, longitude: busi.longitude}}
