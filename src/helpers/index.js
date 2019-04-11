@@ -44,10 +44,10 @@ export async function getServicesList(businesses) {
   businesses.forEach(business => {
     business.offerings.forEach(offer => {
       services.push({
-        ...offer, 
+        ...offer,
         nextAvailableSlot: moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes'),
         distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
-        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name}})
+        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString}})
     })
   })
   return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )
