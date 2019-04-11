@@ -26,7 +26,7 @@ export default class Home extends Component {
   async handleSearch() {
     if (this.state.searchValue.length < 3) {
       return
-    } 
+    }
     const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue)
     if (businesses.length === 0) {
       Alert.alert('no businesses found')
@@ -34,15 +34,16 @@ export default class Home extends Component {
     }
     Navigation.push(this.props.componentId, {
       component: {
-        name: 'MapView',
+        name: 'ListView',
         passProps: {
           businesses,
-          coords
+          coords,
+          query: this.state.searchValue
         },
         options: {
           topBar: {
             title: {
-              text: 'Map View'
+              text: 'List View'
             }
           }
         }
@@ -53,7 +54,7 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput 
+        <TextInput
           onChangeText={this.handleChangeText}
           style={{backgroundColor: '#FBB', paddingVertical: 10}}
         />

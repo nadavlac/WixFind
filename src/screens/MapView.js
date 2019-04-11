@@ -13,7 +13,7 @@ import { Marker, Callout } from 'react-native-maps';
 import { Navigation } from 'react-native-navigation';
 import * as helpers from '../helpers'
 
-export default class App extends Component {
+export default class MapScreen extends Component {
 
   static get options() {
     return {
@@ -49,6 +49,7 @@ export default class App extends Component {
   }
 
   render() {
+    console.log('in map screen ')
     return (
       <SafeAreaView style={styles.container}>
         {/*<Text onPress={() => Navigation.push('ListView')}>press me</Text>*/}

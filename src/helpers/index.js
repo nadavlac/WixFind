@@ -1,25 +1,25 @@
-const businesses = require('../../businessesData.json');
-const DISTANCE_RADIUS = 2100
+const businesses = require('../../assets/businessesData.json');
+const DISTANCE_RADIUS = 2500;
 
 function getLocation() {
   return new Promise(resolve => {
     navigator.geolocation.getCurrentPosition(
-      (position) => resolve(position), 
+      (position) => resolve(position),
       (e) => resolve({error: e}),
       {maximumAge: 0, timeout: 20000, enableHighAccuracy: false}
     )
-  }) 
+  })
 }
 
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   const R = 6371; // Radius of the earth in km
   const dLat = deg2rad(lat2-lat1);  // deg2rad below
-  const dLon = deg2rad(lon2-lon1); 
-  const a = 
+  const dLon = deg2rad(lon2-lon1);
+  const a =
     Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2); 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   const d = R * c; // Distance in km
   return d;
 }
@@ -33,7 +33,7 @@ export function searchBusinesses(searchValue) {
     const location = await getLocation()
 
     if (location.error) {
-      return 
+      return
     }
 
     const {coords} = location
@@ -83,9 +83,9 @@ export function getRegionForFilteredBusinesses(businesses) {
   const deltaY = (maxY - minY);
 
   return {
-    latitude: midX, 
+    latitude: midX,
     longitude: midY,
-    latitudeDelta: deltaX > 0 ? deltaX : 0.3, 
+    latitudeDelta: deltaX > 0 ? deltaX : 0.3,
     longitudeDelta: deltaY > 0 ? deltaY : 0.4
   };
 }

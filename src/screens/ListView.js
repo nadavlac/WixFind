@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, Alert, FlatList} from 'react-native';
+import {StyleSheet, Alert, FlatList, TouchableOpacity, Image} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import {AnimatableManager, ThemeManager, Colors, BorderRadiuses, ListItem, Text, View} from 'react-native-ui-lib'; //eslint-disable-line
+import MapScreen from './MapView';
+const mapIcon = require('../../assets/mapIcon.png');
+const listIcon = require('../../assets/listIcon.png');
 
 export default class ListView extends Component {
 
@@ -11,52 +14,9 @@ export default class ListView extends Component {
     this.state = {
       onEdit: false,
       updating: false,
+      mode: 'MAP'
     };
   }
-
-  query = 'photography';
-
-  results = [
-    {
-      "name": "THE SHOP EXPERT",
-      "siteUrl": "https://repairsxcarmichael.wixsite.com/theshop",
-      "msId": "e00fe2a5-8e03-4eab-a48a-faee7f0cc1ff",
-      "email": "repairsxcarmichael@gmail.com",
-      "instanceId": "f4155a9a-eac3-4e56-a710-37ff673b4911",
-      "templateTitle": "Start in ADI",
-      "shortDescription": "We offer iPhone and iPad repairs at fair reasonable prices! ",
-      "phone": "(912) 977-6248",
-      "logoUrl": "cacb57_e15433ae8e2f4512a882aa76af509617~mv2.png",
-      "latitude": 32.9305786,
-      "longitude": -80.00318329999999
-    },
-    {
-      "name": "ZZZzzzz - Blissful whole-family sleep",
-      "siteUrl": "http://evawalther.wixsite.com/zzzleep",
-      "msId": "dce1e56b-1402-45d1-9448-cf9ced7af6d7",
-      "email": "eva@zleepblissfully.com",
-      "instanceId": "d6e6b50e-63a5-4ff2-8dfd-879906ea44e8",
-      "templateTitle": "Lactation Consultant",
-      "shortDescription": "I support and guide sleep deprived working moms with easy to follow and simple steps to a blissful whole-family sleep - no cry it out involved.",
-      "phone": null,
-      "logoUrl": "398131_1eb4472633e94797af0164f948c31e62~mv2.jpg",
-      "latitude": 56.26392000000001,
-      "longitude": 9.501785000000002
-    },
-    {
-      "name": "SHIFFFF",
-      "siteUrl": "http://evawalther.wixsite.com/zzzleep",
-      "msId": "dce1e56b-1402-45d1-9448-cf9ced7af657",
-      "email": "eva@zleepblissfully.com",
-      "instanceId": "d6e6b50e-63a5-4ff2-8dfd-879906ea44e8",
-      "templateTitle": "Lactation Consultant",
-      "shortDescription": "I support and guide sleep deprived working moms with easy to follow and simple steps to a blissful whole-family sleep - no cry it out involved.",
-      "phone": null,
-      "logoUrl": "398131_1eb4472633e94797af0164f948c31e62~mv2.jpg",
-      "latitude": 56.26392000000001,
-      "longitude": 9.501785000000002
-    },
-  ];
 
   keyExtractor = item => item.msId;
 
@@ -95,15 +55,38 @@ export default class ListView extends Component {
     );
   }
 
-  render() {
+  renderList() {
+    const {businesses, query} = this.props;
     return (
       <View>
-        <Text  color={Colors.red10} text50 middle style={{marginTop: 10, marginLeft: 65}}>{`you're looking for ${this.query}`}</Text>
+        <Text  color={Colors.red10} text50 middle style={{marginTop: 10, marginLeft: 65}}>{`you're looking for ${query}`}</Text>
         <FlatList
-          data={this.results}
+          data={businesses}
           renderItem={({item, index}) => this.renderRow(item, index)}
           keyExtractor={this.keyExtractor}
         />
+      </View>
+    )
+  }
+
+  renderMap() {
+    return (
+        <MapScreen {...this.props}/>
+    )
+  }
+
+  render() {
+
+  const imageSrc = this.state.mode === 'MAP' ? listIcon : mapIcon;
+
+    return (
+      <View flex>
+        {this.state.mode === 'MAP' ? this.renderMap() : this.renderList()}
+        <View style={{position:'absolute', bottom:20, right:20}}>
+          <TouchableOpacity onPress={()=> {this.setState({mode: this.state.mode==='MAP' ? 'LIST': 'MAP'})}}>
+            <Image source={imageSrc} style={{height:30, width:30}}/>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
