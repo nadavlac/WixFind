@@ -2,6 +2,7 @@ import moment from 'moment';
 
 const businesses = require('../../assets/businessesData.json');
 export const DISTANCE_RADIUS = 2100
+const SEARCH_PADDING = 0.22
 
 function getLocation() {
   return new Promise(resolve => {
@@ -103,8 +104,8 @@ export function getRegionForFilteredBusinesses(businesses) {
   const midY = (minY + maxY) / 2;
   // const midbusiness = [midX, midY];
 
-  const deltaX = (maxX - minX);
-  const deltaY = (maxY - minY);
+  const deltaX = (maxX - minX) + SEARCH_PADDING;
+  const deltaY = (maxY - minY) + SEARCH_PADDING;
 
   return {
     latitude: midX,
