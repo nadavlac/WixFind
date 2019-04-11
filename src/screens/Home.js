@@ -22,7 +22,7 @@ export default class Home extends Component {
 
     this.handleChangeText = this.handleChangeText.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.handleValueChange = _.debounce(this.handleValueChange.bind(this), 500)
+    this.handleValueChange = _.debounce(this.handleValueChange.bind(this), 200)
   }
 
   handleChangeText(searchValue) {
@@ -33,18 +33,24 @@ export default class Home extends Component {
     if (this.state.searchValue.length < 3) {
       return
     } 
+    
     const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue, this.state.searchRadius)
+
     if (businesses.length === 0) {
       Alert.alert('no businesses found')
       return
     }
+
+    const services = helpers.getServicesList(businesses)
+    
     Navigation.push(this.props.componentId, {
       component: {
         name: 'ListView',
         passProps: {
           businesses,
           coords,
-          query: this.state.searchValue
+          query: this.state.searchValue,
+          services
         },
         options: {
           topBar: {

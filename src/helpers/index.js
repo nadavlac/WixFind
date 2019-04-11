@@ -28,6 +28,16 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
+export function getServicesList(businesses) {
+  let services = []
+  businesses.forEach(business => {
+    business.offerings.forEach(offer => {
+      services.push({...offer, business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name}})
+    })
+  })
+  return services
+}
+
 export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS) {
   return new Promise(async (resolve) => {
     const location = await getLocation()
