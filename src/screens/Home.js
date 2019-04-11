@@ -1,10 +1,14 @@
 
 
 import React, {Component} from 'react';
-import {StyleSheet, View, TextInput, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity, Alert, Dimensions} from 'react-native';
 import {Typography, Colors, Text} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
 import * as helpers from '../helpers'
+import Slider from '@react-native-community/slider';
+const screenWidth = Dimensions.get('window').width;
+import {DISTANCE_RADIUS} from '../helpers'
+import _ from 'lodash'
 
 export default class Home extends Component {
 
@@ -12,11 +16,13 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-      searchValue: ''
+      searchValue: '',
+      searchRadius: DISTANCE_RADIUS
     }
 
     this.handleChangeText = this.handleChangeText.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleValueChange = _.debounce(this.handleValueChange.bind(this), 500)
   }
 
   handleChangeText(searchValue) {
@@ -26,8 +32,8 @@ export default class Home extends Component {
   async handleSearch() {
     if (this.state.searchValue.length < 3) {
       return
-    }
-    const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue)
+    } 
+    const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue, this.state.searchRadius)
     if (businesses.length === 0) {
       Alert.alert('no businesses found')
       return
@@ -51,6 +57,11 @@ export default class Home extends Component {
     });
   }
 
+  handleValueChange(value) {
+    this.setState({searchRadius: Math.round(value)})
+    console.log('valiue', value)
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -61,6 +72,19 @@ export default class Home extends Component {
         <TouchableOpacity onPress={this.handleSearch}>
           <Text>Search</Text>
         </TouchableOpacity>
+        <View style={{paddingTop: 20, alignItems: 'center'}}>
+          <Text>Search Radius</Text>
+          <Slider
+            style={{width: screenWidth - 80, height: 40}}
+            minimumValue={1}
+            maximumValue={6371}
+            minimumTrackTintColor="#f2f9"
+            maximumTrackTintColor="#e2e2e2"
+            onValueChange={this.handleValueChange}
+            value={this.state.searchRadius}
+          />
+          <Text>{this.state.searchRadius}</Text>
+        </View>
       </View>
     );
   }

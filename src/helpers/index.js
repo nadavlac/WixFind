@@ -1,5 +1,5 @@
 const businesses = require('../../assets/businessesData.json');
-const DISTANCE_RADIUS = 2500;
+export const DISTANCE_RADIUS = 2100
 
 function getLocation() {
   return new Promise(resolve => {
@@ -28,7 +28,7 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-export function searchBusinesses(searchValue) {
+export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS) {
   return new Promise(async (resolve) => {
     const location = await getLocation()
 
@@ -40,7 +40,7 @@ export function searchBusinesses(searchValue) {
 
     const filteredBusinesses = businesses.filter(business => {
       const distance = getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude)
-      if (business.latitude && business.longitude && business.name && distance < DISTANCE_RADIUS) {
+      if (business.latitude && business.longitude && business.name && distance < distanceRadius) {
         const searchWordsArray = searchValue.trim().toLowerCase().split(' ')
         let searchString = business.name
         business.offerings.forEach(o => searchString = searchString + o.name)
