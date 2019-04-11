@@ -52,7 +52,6 @@ export default class MapScreen extends Component {
     console.log('in map screen ')
     return (
       <SafeAreaView style={styles.container}>
-        {/*<Text onPress={() => Navigation.push('ListView')}>press me</Text>*/}
         <TouchableOpacity
           style={{backgroundColor: '#FBB'}}
           onPress={() => {

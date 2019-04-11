@@ -47,7 +47,7 @@ export async function getServicesList(businesses) {
         ...offer,
         nextAvailableSlot: moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes'),
         distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
-        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString}})
+        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude, latitude: business.latitude}})
     })
   })
   return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )

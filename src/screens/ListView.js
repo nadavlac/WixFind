@@ -7,6 +7,7 @@ const mapIcon = require('../../assets/mapIcon.png');
 const listIcon = require('../../assets/listIcon.png');
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Navigation} from 'react-native-navigation';
 
 export default class ListView extends Component {
 
@@ -31,7 +32,17 @@ export default class ListView extends Component {
               activeBackgroundColor={Colors.dark60}
               activeOpacity={0.3}
               height={100}
-              onPress={() => Alert.alert(`pressed on order #${id + 1}`)}
+              onPress={() => {
+                Navigation.push(this.props.componentId, {
+                  component: {
+                    name: 'BusinessPage',
+                    passProps: {
+                      service: row,
+                      business: row.business
+                    }
+                  },
+                })
+              }}
             >
               <ListItem.Part left column containerStyle={[styles.border, {paddingRight: 17, paddingLeft: 10}]}>
                 <Text dark10 text100 numberOfLines={1} style={{ marginBottom: 3}}>{moment(row.nextAvailableSlot).format('DD/MM')}</Text>
