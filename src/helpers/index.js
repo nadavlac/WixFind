@@ -1,5 +1,5 @@
 const businesses = require('../../businessesData.json');
-const DISTANCE_RADIUS = 2000
+const DISTANCE_RADIUS = 2100
 
 function getLocation() {
   return new Promise(resolve => {
@@ -40,10 +40,12 @@ export function searchBusinesses(searchValue) {
 
     const filteredBusinesses = businesses.filter(business => {
       const distance = getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude)
-      if (business.name && distance < DISTANCE_RADIUS) {
+      if (business.latitude && business.longitude && business.name && distance < DISTANCE_RADIUS) {
         const searchWordsArray = searchValue.trim().toLowerCase().split(' ')
+        let searchString = business.name
+        business.offerings.forEach(o => searchString = searchString + o.name)
         return searchWordsArray.some(word => {
-          return business.name.trim().toLowerCase().includes(word)
+          return searchString.trim().toLowerCase().includes(word)
         })
       } else {
         return false
@@ -55,7 +57,6 @@ export function searchBusinesses(searchValue) {
 }
 
 export function getRegionForFilteredBusinesses(businesses) {
-  console.log('***** getRegionForFilteredBusinesses', businesses)
   let minX, maxX, minY, maxY;
 
   // init first business
@@ -81,19 +82,10 @@ export function getRegionForFilteredBusinesses(businesses) {
   const deltaX = (maxX - minX);
   const deltaY = (maxY - minY);
 
-  console.log('1', {minX, maxX, minY, maxY})
-
-  console.log('region', {
-    latitude: midX, 
-    longitude: midY,
-    latitudeDelta: deltaX, 
-    longitudeDelta: deltaY
-  })
-
   return {
     latitude: midX, 
     longitude: midY,
-    latitudeDelta: deltaX, 
-    longitudeDelta: deltaY
+    latitudeDelta: deltaX > 0 ? deltaX : 0.3, 
+    longitudeDelta: deltaY > 0 ? deltaY : 0.4
   };
 }

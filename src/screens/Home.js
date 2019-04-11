@@ -1,7 +1,7 @@
 
 
 import React, {Component} from 'react';
-import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity, Alert} from 'react-native';
 import {Typography, Colors, Text} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
 import * as helpers from '../helpers'
@@ -24,10 +24,14 @@ export default class Home extends Component {
   }
 
   async handleSearch() {
-    if (this.state.searchValue.length <= 3) {
+    if (this.state.searchValue.length < 3) {
       return
     } 
     const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue)
+    if (businesses.length === 0) {
+      Alert.alert('no businesses found')
+      return
+    }
     Navigation.push(this.props.componentId, {
       component: {
         name: 'MapView',

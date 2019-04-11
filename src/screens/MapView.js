@@ -7,25 +7,13 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, View, TouchableOpacity, Linking, Image, SafeAreaView, Text} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Linking, Image, SafeAreaView, Text} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker, Callout } from 'react-native-maps';
-import {Typography, Colors} from 'react-native-ui-lib';
 import { Navigation } from 'react-native-navigation';
 import * as helpers from '../helpers'
 
-// const businesses = require('../../businessesData.json');
-
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
   static get options() {
     return {
@@ -47,13 +35,6 @@ export default class App extends Component<Props> {
     this.handleRegionChangeComplete = this.handleRegionChangeComplete.bind(this)
   }
 
-  componentDidMount() {
-    console.log('did mount')
-    setTimeout(() => {
-      console.log('timeout')
-    }, 3000)
-  }
-
   renderCallout(busi) {
     return (
       <TouchableOpacity onPress={() => Linking.openURL(busi.siteUrl)}>
@@ -64,8 +45,7 @@ export default class App extends Component<Props> {
   }
 
   handleRegionChangeComplete(region) {
-    console.log('handleRegionChangeComplete region', region)
-    this.setState({region: helpers.getRegionForFilteredBusinesses(this.props.businesses)})
+    this.setState({region: {...this.state.region, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta}})
   }
 
   render() {
@@ -80,9 +60,7 @@ export default class App extends Component<Props> {
               component: {
                 name: 'ListView',
               }
-            }).then(() => {
-                console.log('success?')
-            }).catch((e) => {console.log('shit happens ', e)});
+            })
           }}
         >
           <View style={{padding: 10}}>
