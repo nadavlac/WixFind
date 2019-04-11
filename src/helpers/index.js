@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const businesses = require('../../assets/businessesData.json');
 export const DISTANCE_RADIUS = 2100
 
@@ -5,8 +7,14 @@ function getLocation() {
   return new Promise(resolve => {
     navigator.geolocation.getCurrentPosition(
       (position) => resolve(position),
-      (e) => resolve({error: e}),
-      {maximumAge: 0, timeout: 20000, enableHighAccuracy: false}
+      (e) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (e) => resolve({error: e}),
+          {maximumAge: 0, timeout: 20000, enableHighAccuracy: false}
+        )
+      },
+      {maximumAge: 0, timeout: 20000, enableHighAccuracy: true}
     )
   })
 }
@@ -28,14 +36,20 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-export function getServicesList(businesses) {
+export async function getServicesList(businesses) {
+  const {coords} = await getLocation();
+  console.log('in get services list' + coords);
   let services = []
   businesses.forEach(business => {
     business.offerings.forEach(offer => {
-      services.push({...offer, business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name}})
+      services.push({
+        ...offer, 
+        nextAvailableSlot: moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes'),
+        distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
+        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name}})
     })
   })
-  return services
+  return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )
 }
 
 export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS) {

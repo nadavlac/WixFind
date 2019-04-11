@@ -33,7 +33,7 @@ export default class Home extends Component {
     if (this.state.searchValue.length < 3) {
       return
     } 
-    
+
     const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue, this.state.searchRadius)
 
     if (businesses.length === 0) {
@@ -41,7 +41,7 @@ export default class Home extends Component {
       return
     }
 
-    const services = helpers.getServicesList(businesses)
+    const services = await helpers.getServicesList(businesses)
     
     Navigation.push(this.props.componentId, {
       component: {

@@ -5,6 +5,7 @@ import {AnimatableManager, ThemeManager, Colors, BorderRadiuses, ListItem, Text,
 import MapScreen from './MapView';
 const mapIcon = require('../../assets/mapIcon.png');
 const listIcon = require('../../assets/listIcon.png');
+import moment from 'moment';
 
 export default class ListView extends Component {
 
@@ -34,15 +35,14 @@ export default class ListView extends Component {
               onPress={() => Alert.alert(`pressed on order #${id + 1}`)}
             >
               <ListItem.Part left>
-                <Animatable.Image
-                  source={{uri: `https://static.wixstatic.com/media/${row.imageUrl ? row.imageUrl : row.business.logoUrl}`}}
-                  style={styles.image}
-                  {...imageAnimationProps}
-                />
+               <Text dark10 text70>{moment(row.nextAvailableSlot).format('ddd h:mm DD/MM')}</Text>
               </ListItem.Part>
               <ListItem.Part middle column containerStyle={[styles.border, {paddingRight: 17}]}>
                 <Text dark10 text70 style={{flex: 1, marginRight: 10,}} numberOfLines={1}>{row.name}</Text>
                 <Text dark10 text50 style={{flex: 1, marginRight: 10}} numberOfLines={2}>{row.business.name}</Text>
+                <Text dark10 text90 style={{flex: 1, marginRight: 10}} numberOfLines={2}>{`${row.distanceFromUser.toFixed(2)} KM`}</Text>
+
+      
               </ListItem.Part>
               <ListItem.Part right>
                 <Button label={'Book'}
