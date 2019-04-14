@@ -61,7 +61,8 @@ export async function getServicesList(businesses) {
         ...offer,
         nextAvailableSlot: getNextAvailableSlot() ,
         distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
-        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude, latitude: business.latitude}})
+        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude,
+          latitude: business.latitude, distanceFromUser, msId: business.msId}})
     })
   })
 
