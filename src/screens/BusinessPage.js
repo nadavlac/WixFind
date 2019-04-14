@@ -46,7 +46,7 @@ export default class MapScreen extends Component {
                     size='small'
                     text90
                     style={{marginBottom: 20, marginRight: 20, marginTop: 20, backgroundColor: mainColor}}
-                    onPress={() => Linking.openURL(row.url)}
+                    onPress={() => row.url ? Linking.openURL(row.url) : Linking.openURL(this.businessData.siteUrl)}
             />
           </ListItem.Part>
         </ListItem>
@@ -74,32 +74,33 @@ export default class MapScreen extends Component {
               coordinate={{latitude: business.latitude, longitude:business.longitude}}
             />
         </MapView>
-        <View column>
-          {console.log('here')}
-          {console.log(business)}
-          <Text dark10 text50 style={{marginLeft: 10, marginRight: 10, marginBottom: 6, marginTop: 10, fontWeight: '500'}} numberOfLines={1}>{business.name}</Text>
-          <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{business.addressString}</Text>
-          <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{`${business.distanceFromUser.toFixed(2)} KM`}</Text>
-        </View>
+        <View style={{marginLeft: 20}}>
+          <View column >
 
-        <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-          <Icon name='ios-call' size={30} style={{marginLeft: 10, marginRight: 40}}/>
-          <Icon name='ios-navigate' size={30} style={{marginRight: 40}}/>
-          <TouchableOpacity onPress={() => {Linking.openURL(business.siteUrl)}}>
-            <Icon name='ios-globe' size={30} style={{marginRight: 40}}/>
-          </TouchableOpacity>
-          <Icon name='ios-share' size={30} style={{marginRight: 40}}/>
+            <Text dark10 text50 style={{marginLeft: 10, marginRight: 10, marginBottom: 6, marginTop: 20, fontWeight: '500'}} numberOfLines={1}>{business.name}</Text>
+            <Text dark10 text90 style={{marginLeft: 10, marginRight: 10}} numberOfLines={1}>{business.addressString}</Text>
+            <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 15}} numberOfLines={1}>{`${business.distanceFromUser.toFixed(2)} KM`}</Text>
+          </View>
+
+          <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+            <Icon name='ios-call' size={30} style={{marginLeft: 10, marginRight: 40}}/>
+            <Icon name='ios-navigate' size={30} style={{marginRight: 40}}/>
+            <TouchableOpacity onPress={() => {Linking.openURL(business.siteUrl)}}>
+              <Icon name='ios-globe' size={30} style={{marginRight: 40}}/>
+            </TouchableOpacity>
+            <Icon name='ios-share' size={30} style={{marginRight: 40}}/>
+          </View>
+        <View>
+          <View style={{ borderBottomWidth:styles.border.borderBottomWidth, borderBottomColor: styles.border.borderColor}}>
+            <Text dark10 text70 style={{marginLeft: 10, marginRight: 10, marginBottom: 25, marginTop: 40, fontWeight: '500'}}>All Services</Text>
+          </View>
+            <FlatList
+            data={this.businessData.offerings}
+            renderItem={({item, index}) => this.renderRow(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
-      <View>
-        <View style={{ borderBottomWidth:styles.border.borderBottomWidth, borderBottomColor: styles.border.borderColor}}>
-          <Text dark10 text70 style={{marginLeft: 10, marginRight: 10, marginBottom: 6, marginTop: 20, fontWeight: '500'}}>All Services</Text>
         </View>
-          <FlatList
-          data={this.businessData.offerings}
-          renderItem={({item, index}) => this.renderRow(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
       </SafeAreaView>
     );
   }
@@ -107,7 +108,7 @@ export default class MapScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   map: {
     width: '100%',
