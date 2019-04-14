@@ -78,6 +78,7 @@ export default class ListView extends Component {
     this.renderSectionHeader = this.renderSectionHeader.bind(this)
     this.renderFilterButton = this.renderFilterButton.bind(this)
     this.renderFlatList = this.renderFlatList.bind(this)
+    this.renderRow = this.renderRow.bind(this)
   }
 
   keyExtractor = (item,index) => index;
@@ -98,8 +99,14 @@ export default class ListView extends Component {
     return sections
   }
 
-  renderRow(row, id) {
+  renderRow({item, index}) {
+    const row = item 
+    const id = index
     const animationProps = AnimatableManager.presets.fadeInRight;
+
+    const timeSlot = moment(row.nextAvailableSlot);
+    const roundedSlot = 15 - (timeSlot.minute() % 15);
+    const dateTime = moment(timeSlot).add(roundedSlot, "minutes").format("h:mm");
 
     return (
       <Animatable.View {...animationProps}>
@@ -121,7 +128,7 @@ export default class ListView extends Component {
               <ListItem.Part left column containerStyle={[styles.border, {paddingRight: 17, paddingLeft: 10}]}>
                 <Text dark10 text100 numberOfLines={1} style={{ marginBottom: 3}}>{moment(row.nextAvailableSlot).format('DD/MM')}</Text>
                 {/*<Text dark10 text100 numberOfLines={1} style={{ marginBottom: 3}}>{moment(row.nextAvailableSlot).format('ddd')}</Text>*/}
-                <Text dark10 text100 numberOfLines={1}>{`${moment(row.nextAvailableSlot).format('h:mm')} PM`}</Text>
+                <Text dark10 text100 numberOfLines={1}>{`${dateTime} PM`}</Text>
               </ListItem.Part>
               <ListItem.Part middle containerStyle={[styles.border, {paddingRight: 17}]}>
                 <ListItem.Part containerStyle={{marginBottom: 3}}>
@@ -160,7 +167,7 @@ export default class ListView extends Component {
       <SectionList
         // data={services}
         sections={this.state.sections}
-        renderItem={({item, index}) => this.renderRow(item, index)}
+        renderItem={this.renderRow}
         keyExtractor={(item, index) => index.toString()}
         renderSectionHeader={this.renderSectionHeader}
       />
@@ -171,7 +178,7 @@ export default class ListView extends Component {
     return (
       <FlatList
         data={this.state.sections[_.keys(FILTERS).indexOf(this.state.filter) -1].data}
-        renderItem={({item, index}) => this.renderRow(item, index)}
+        renderItem={this.renderRow}
         keyExtractor={(item, index) => index.toString()}
       />
     )
