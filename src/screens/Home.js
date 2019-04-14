@@ -12,6 +12,8 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import {DISTANCE_RADIUS} from '../helpers'
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import SplashScreen from 'react-native-splash-screen'
 
 const title = 'What kind of\nservice are you\nlooking for?'
@@ -137,6 +139,7 @@ export default class Home extends Component {
           </View>
 
         </View>
+        {/* <EntypoIcon name='man' color='#f4c04f' size={60} style={{marginTop: 20}}/> */}
         <View flex>
           <MapView
             style={styles.map}
@@ -146,6 +149,8 @@ export default class Home extends Component {
             {this.state.location &&
             <Marker
               coordinate={{latitude: this.state.location.latitude, longitude: this.state.location.longitude}}
+              // image={require('../../assets/man.png')}
+              pinColor='#f4c04f'
             />}
           </MapView>
         </View>

@@ -47,7 +47,6 @@ export default class MapScreen extends Component {
   }
 
   render() {
-    console.log('in map screen ')
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity

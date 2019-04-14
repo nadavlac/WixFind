@@ -94,8 +94,8 @@ export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS, 
       business['distanceFromUser'] = distance;
       if (business.latitude && business.longitude && business.name && distance < distanceRadius) {
         const searchWordsArray = searchValue.trim().toLowerCase().split(' ')
-        let searchString = business.name
-        business.offerings.forEach(o => searchString = searchString + o.name)
+        let searchString = business.name.toLowerCase()
+        business.offerings.forEach(o => searchString = searchString + o.name.toLowerCase())
         return searchWordsArray.some(word => {
           return searchString.trim().toLowerCase().includes(word)
         })
