@@ -78,7 +78,7 @@ export default class Home extends Component {
   }
 
   render() {
-    console.log('location', this.state.location)
+    
     return (
       <View style={styles.container}>
         <View style={{backgroundColor: '#397df6', flex: 1, paddingTop: 75}}>

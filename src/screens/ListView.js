@@ -22,6 +22,7 @@ export default class ListView extends Component {
     };
 
     this.getSections = this.getSections.bind(this)
+    this.renderSectionHeader = this.renderSectionHeader.bind(this)
   }
 
   keyExtractor = (item,index) => index;
@@ -32,19 +33,17 @@ export default class ListView extends Component {
       {title: 'Tomorrow', data: []},
       {title: 'Later', data: []}
     ]
-    const today = moment()
 
     this.props.services.forEach(s => {
-      console.log('moment(s.nextAvailableSlot).format(l)', moment(s.nextAvailableSlot).format('l'))
-      if (moment(s.nextAvailableSlot).format('l') === today.format('l')) {
+      if (moment(s.nextAvailableSlot).format('l') === moment().format('l')) {
         sections[0].data.push(s)
-      } else if (moment(s.nextAvailableSlot).format('l') === today.add(1, 'days')) {
+      } else if (moment(s.nextAvailableSlot).format('l') === moment().add(1, 'days').format('l')) {
         sections[1].data.push(s)
       } else {
         sections[2].data.push(s)
       }
     })
-    console.log('sections', sections)
+    
     return sections
   }
 
@@ -100,6 +99,14 @@ export default class ListView extends Component {
     );
   }
 
+  renderSectionHeader({section: {title}}) {
+    return (
+      <View style={{backgroundColor: '#FFF'}}>
+        <Text style={{fontWeight: 'bold'}}>{title}</Text>
+      </View>
+    )
+  }
+
   renderList() {
     const {services, query} = this.props;
     return (
@@ -113,9 +120,7 @@ export default class ListView extends Component {
           sections={this.getSections()}
           renderItem={({item, index}) => this.renderRow(item, index)}
           keyExtractor={(item, index) => index.toString()}
-          renderSectionHeader={({section: {title}}) => (
-            <Text style={{fontWeight: 'bold'}}>{title}</Text>
-          )}
+          renderSectionHeader={this.renderSectionHeader}
         />
       </View>
     )

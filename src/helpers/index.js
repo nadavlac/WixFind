@@ -43,10 +43,10 @@ export async function getServicesList(businesses) {
   function getNextAvailableSlot() {
     if (addTodayCounter < 2) {
       addTodayCounter++
-      return moment().add((Math.floor(Math.random() * 1) + 5), 'minutes')
+      return moment().add((Math.floor(Math.random() * 720) + 5), 'minutes')
     } if (addTomorrowCounter < 2) {
       addTomorrowCounter++
-      return moment().add((Math.floor(Math.random() * 720) + 5), 'minutes')
+      return moment().add((Math.floor(Math.random() * 1420) + 5), 'minutes')
     } else {
       return moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes')
     }
