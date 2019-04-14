@@ -38,7 +38,8 @@ export default class Home extends Component {
     this.handleChangeText = this.handleChangeText.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleValueChange = _.debounce(this.handleValueChange.bind(this), 200)
-    this.handleRegionChangeComplete = _.debounce(this.handleRegionChangeComplete.bind(this), 200)
+    this.handleRegionChangeComplete = this.handleRegionChangeComplete.bind(this)
+    this.handleSubmitEditing = this.handleSubmitEditing.bind(this)
   }
 
   async componentDidMount() {
@@ -105,6 +106,10 @@ export default class Home extends Component {
     this.setState({region, location: {latitude: region.latitude, longitude: region.longitude}})
   }
 
+  handleSubmitEditing() {
+    this.handleSearch()
+  }
+
   render() {
     
     return (
@@ -122,6 +127,7 @@ export default class Home extends Component {
               value={this.state.searchValue}
               placeholder='Search'
               placeholderTextColor='#fff'
+              onSubmitEditing={this.handleSubmitEditing}
             />
           </View>
           <View style={{paddingLeft: 20, paddingTop: 10}}>
@@ -132,11 +138,7 @@ export default class Home extends Component {
         <View flex>
           <MapView
             style={styles.map}
-            region={this.state.location && {
-              ...this.state.location,
-              latitudeDelta: .5,
-              longitudeDelta: .5,
-            }}
+            region={this.state.region}
             onRegionChangeComplete={this.handleRegionChangeComplete}
           >
             {this.state.location &&
