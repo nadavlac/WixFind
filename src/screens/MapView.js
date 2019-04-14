@@ -38,13 +38,12 @@ export default class MapScreen extends Component {
         })
       }}>
         <Text>{busi.name}</Text>
-        {/*<Image source={{uri: `https://static.wixstatic.com/media/${busi.logoUrl}`}} style={{width: 20, height:20}}/>*/}
       </TouchableOpacity>
     )
   }
 
   handleRegionChangeComplete(region) {
-    this.setState({region: {...this.state.region, latitudeDelta: region.latitudeDelta, longitudeDelta: region.longitudeDelta}})
+    this.setState({region})
   }
 
   render() {
@@ -96,6 +95,5 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-    top: 50
   }
 });

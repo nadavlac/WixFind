@@ -206,34 +206,40 @@ export default class ListView extends Component {
     )
   }
 
+  renderSearchSection() {
+    const {query} = this.props;
+    return (
+      <View style={{backgroundColor: mainColor, paddingBottom: 20}}>
+        <View 
+          style={{
+            borderBottomWidth: 1, 
+            borderBottomColor: '#ffffff', 
+            marginHorizontal: 20, 
+            marginTop: 20, 
+            flexDirection: 'row', 
+            alignItems: 'center',
+            marginBottom: 25
+          }}
+        >
+          <View>
+            <Icon name='ios-search' color='#fff' size={20}/>
+          </View>
+          <Text style={{paddingVertical: 10, width: '100%', color: '#fff', marginLeft: 10}}>
+            {query}
+          </Text>
+        </View>
+        <View row style={{paddingLeft: 20}}>
+          {_.keys(FILTERS).map(this.renderFilterButton)}
+        </View>
+      </View>
+    )
+  }
+
   renderList() {
-    const {services, query} = this.props;
     return (
       <View>
-        <View style={{backgroundColor: mainColor, paddingBottom: 20}}>
-          <View 
-            style={{
-              borderBottomWidth: 1, 
-              borderBottomColor: '#ffffff', 
-              marginHorizontal: 20, 
-              marginTop: 20, 
-              flexDirection: 'row', 
-              alignItems: 'center',
-              marginBottom: 25
-            }}
-          >
-            <View>
-              <Icon name='ios-search' color='#fff' size={20}/>
-            </View>
-            <Text style={{paddingVertical: 10, width: '100%', color: '#fff', marginLeft: 10}}>
-              {query}
-            </Text>
-          </View>
-          {/* <Text color={'white'} text50 style={{margin:50}}>{`${query}`}</Text> */}
-          <View row style={{paddingLeft: 20}}>
-            {_.keys(FILTERS).map(this.renderFilterButton)}
-          </View>
-        </View>
+
+        {this.renderSearchSection()}
 
         {this.state.filter === FILTERS.all.id
           ? this.renderSectionList()
@@ -245,7 +251,10 @@ export default class ListView extends Component {
 
   renderMap() {
     return (
-      <MapScreen {...this.props}/>
+      <View flex>
+        {this.renderSearchSection()}
+        <MapScreen {...this.props}/>
+      </View>
     )
   }
 
