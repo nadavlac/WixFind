@@ -6,8 +6,9 @@ import MapScreen from './MapView';
 const mapIcon = require('../../assets/mapIcon.png');
 const listIcon = require('../../assets/listIcon.png');
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {Navigation} from 'react-native-navigation';
+
+export const mainColor = '#397df6';
 
 export default class ListView extends Component {
 
@@ -38,7 +39,8 @@ export default class ListView extends Component {
                     name: 'BusinessPage',
                     passProps: {
                       service: row,
-                      business: row.business
+                      business: row.business,
+                      all: this.props
                     }
                   },
                 })
@@ -66,8 +68,8 @@ export default class ListView extends Component {
                         labelStyle={{fontWeight: '100'}}
                         size='small'
                         text90
-                        style={{marginBottom: 20, marginRight: 20}}
-                        onPress={() => Linking.openURL(row.url)}
+                        style={{marginBottom: 20, marginRight: 20, marginTop: 20, backgroundColor: mainColor}}
+                        onPress={() => row.url ? Linking.openURL(row.url) : Linking.openURL(row.business.siteUrl)}
                 />
               </ListItem.Part>
             </ListItem>
@@ -80,7 +82,7 @@ export default class ListView extends Component {
     const {services, query} = this.props;
     return (
       <View>
-        <View style={{backgroundColor: Colors.blue10}}>
+        <View style={{backgroundColor: mainColor}}>
           {/*<Icon name="search" color="#4F8EF7" />*/}
           <Text color={'white'} text50 style={{margin:50}}>{`${query}`}</Text>
         </View>

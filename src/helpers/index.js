@@ -20,7 +20,7 @@ export function getLocation() {
   })
 }
 
-function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+export function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   const R = 6371; // Radius of the earth in km
   const dLat = deg2rad(lat2-lat1);  // deg2rad below
   const dLon = deg2rad(lon2-lon1);
@@ -47,9 +47,10 @@ export async function getServicesList(businesses) {
         ...offer,
         nextAvailableSlot: moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes'),
         distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
-        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude, latitude: business.latitude}})
+        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude,
+                  latitude: business.latitude, msId: business.msId}})
     })
-  })
+  });
   return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )
 }
 
