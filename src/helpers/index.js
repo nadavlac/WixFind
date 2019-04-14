@@ -38,19 +38,33 @@ function deg2rad(deg) {
 }
 
 export async function getServicesList(businesses) {
+  let addTodayCounter = 0
+  let addTomorrowCounter = 0
+  function getNextAvailableSlot() {
+    if (addTodayCounter < 2) {
+      addTodayCounter++
+      return moment().add((Math.floor(Math.random() * 1) + 5), 'minutes')
+    } if (addTomorrowCounter < 2) {
+      addTomorrowCounter++
+      return moment().add((Math.floor(Math.random() * 720) + 5), 'minutes')
+    } else {
+      return moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes')
+    }
+  }
   const {coords} = await getLocation();
   let services = []
+
   businesses.forEach(business => {
     const distanceFromUser = getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude);
     business.offerings.forEach(offer => {
       services.push({
         ...offer,
-        nextAvailableSlot: moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes'),
-        distanceFromUser,
-        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude,
-                  latitude: business.latitude, msId: business.msId, distanceFromUser}})
+        nextAvailableSlot: getNextAvailableSlot() ,
+        distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
+        business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude, latitude: business.latitude}})
     })
-  });
+  })
+
   return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )
 }
 

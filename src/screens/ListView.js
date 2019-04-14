@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Alert, FlatList, TouchableOpacity, Image, Linking} from 'react-native';
+import {StyleSheet, Alert, FlatList, TouchableOpacity, Image, Linking, SectionList} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import {AnimatableManager, ThemeManager, Colors, BorderRadiuses, ListItem, Text, View, Button} from 'react-native-ui-lib'; //eslint-disable-line
 import MapScreen from './MapView';
@@ -18,11 +18,35 @@ export default class ListView extends Component {
     this.state = {
       onEdit: false,
       updating: false,
-      mode: 'MAP'
+      mode: 'LIST'
     };
+
+    this.getSections = this.getSections.bind(this)
   }
 
   keyExtractor = (item,index) => index;
+
+  getSections() {
+    let sections = [
+      {title: 'Today', data: []},
+      {title: 'Tomorrow', data: []},
+      {title: 'Later', data: []}
+    ]
+    const today = moment()
+
+    this.props.services.forEach(s => {
+      console.log('moment(s.nextAvailableSlot).format(l)', moment(s.nextAvailableSlot).format('l'))
+      if (moment(s.nextAvailableSlot).format('l') === today.format('l')) {
+        sections[0].data.push(s)
+      } else if (moment(s.nextAvailableSlot).format('l') === today.add(1, 'days')) {
+        sections[1].data.push(s)
+      } else {
+        sections[2].data.push(s)
+      }
+    })
+    console.log('sections', sections)
+    return sections
+  }
 
   renderRow(row, id) {
     const animationProps = AnimatableManager.presets.fadeInRight;
@@ -84,10 +108,14 @@ export default class ListView extends Component {
           {/*<Icon name="search" color="#4F8EF7" />*/}
           <Text color={'white'} text50 style={{margin:50}}>{`${query}`}</Text>
         </View>
-        <FlatList
-          data={services}
+        <SectionList
+          // data={services}
+          sections={this.getSections()}
           renderItem={({item, index}) => this.renderRow(item, index)}
           keyExtractor={(item, index) => index.toString()}
+          renderSectionHeader={({section: {title}}) => (
+            <Text style={{fontWeight: 'bold'}}>{title}</Text>
+          )}
         />
       </View>
     )
@@ -100,8 +128,8 @@ export default class ListView extends Component {
   }
 
   render() {
-
-  const imageSrc = this.state.mode === 'MAP' ? listIcon : mapIcon;
+    console.log('this.props', this.props)
+    const imageSrc = this.state.mode === 'MAP' ? listIcon : mapIcon;
 
     return (
       <View flex>
