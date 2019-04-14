@@ -34,12 +34,14 @@ export default class Home extends Component {
     this.state = {
       searchValue: '',
       searchRadius: DISTANCE_RADIUS,
-      location: null
+      location: null,
+      region: null
     }
 
     this.handleChangeText = this.handleChangeText.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleValueChange = _.debounce(this.handleValueChange.bind(this), 200)
+    this.handleRegionChangeComplete = this.handleRegionChangeComplete.bind(this)
   }
 
   async componentDidMount() {
@@ -87,10 +89,14 @@ export default class Home extends Component {
 
   handleValueChange(value) {
     this.setState({searchRadius: Math.round(value)})
-    console.log('valiue', value)
+  }
+
+  handleRegionChangeComplete(region) {
+    this.setState({region, location: {latitude: region.latitude, longitude: region.longitude}})
   }
 
   render() {
+    console.log('location', this.state.location)
     return (
       <View style={styles.container}>
         <View style={{backgroundColor: '#397df6', flex: 1, paddingTop: 75}}>
@@ -110,7 +116,18 @@ export default class Home extends Component {
         <View flex>
           <MapView
             style={styles.map}
-            region={this.state.region}
+            zoomEnabled={false}
+            zoomTapEnabled={false}
+            zoomControlEnabled={false}
+            rotateEnabled={false}
+            scrollEnabled={false}
+            pitchEnabled={false}
+            region={this.state.location && {
+              ...this.state.location,
+              latitudeDelta: .5,
+              longitudeDelta: .5,
+            }}
+            // onRegionChangeComplete={this.handleRegionChangeComplete}
           >
             {this.state.location && 
             <Marker
