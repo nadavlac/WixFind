@@ -12,6 +12,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import {DISTANCE_RADIUS} from '../helpers'
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/Ionicons';
+import SplashScreen from 'react-native-splash-screen'
 
 const title = 'What kind of\nservice are you\nlooking for?'
 
@@ -43,6 +44,7 @@ export default class Home extends Component {
   }
 
   async componentDidMount() {
+    SplashScreen.hide();
     const {coords} = await helpers.getLocation()
     this.setState({location: coords})
   }

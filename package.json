@@ -14,6 +14,7 @@
     "react-native": "0.59.4",
     "react-native-maps": "https://github.com/react-native-community/react-native-maps.git#c102c36d895cbef8b6a8deefd4c58fb0dc17638e",
     "react-native-navigation": "^2.17.0",
+    "react-native-splash-screen": "^3.2.0",
     "react-native-ui-lib": "^3.23.1",
     "react-native-vector-icons": "^6.4.2"
   },
