@@ -7,6 +7,7 @@ const mapIcon = require('../../assets/mapIcon.png');
 const listIcon = require('../../assets/listIcon.png');
 import moment from 'moment';
 import {Navigation} from 'react-native-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const mainColor = '#397df6';
 
@@ -77,7 +78,7 @@ export default class ListView extends Component {
                   <Image source={{uri: row.imageUrl ? `https://static.wixstatic.com/media/${row.imageUrl}` : `https://static.wixstatic.com/media/${row.business.logoUrl}`}}
                          style={{width: 30, height:30, borderRadius: 15}}/>
                 </ListItem.Part>
-                <ListItem.Part column containerStyle={[styles.border, {paddingRight: 17, paddingLeft: 17, marginTop:10}]}>
+                <ListItem.Part column containerStyle={[styles.border, {paddingRight: 17, paddingLeft: 17, marginTop:10, flex: 1} ]}>
                   <Text color={'black'} text90 style={{flex: 1, marginRight: 10}} numberOfLines={1}>{row.name}</Text>
                   <Text dark10 text60 style={{flex: 1, marginRight: 10, fontWeight: '500'}} numberOfLines={1}>{row.business.name}</Text>
                   <Text dark10 text90 style={{flex: 1, marginRight: 10}} numberOfLines={1}>{row.business.addressString}</Text>
@@ -85,13 +86,9 @@ export default class ListView extends Component {
                 </ListItem.Part>
               </ListItem.Part>
               <ListItem.Part right>
-                <Button label={'Book'}
-                        labelStyle={{fontWeight: '100'}}
-                        size='small'
-                        text90
-                        style={{marginBottom: 20, marginRight: 20, marginTop: 20, backgroundColor: mainColor}}
-                        onPress={() => row.url ? Linking.openURL(row.url) : Linking.openURL(row.business.siteUrl)}
-                />
+                <TouchableOpacity style={{marginBottom: 20, marginRight: 20, marginTop: 20}}>
+                  <Icon name='ios-arrow-forward' size={20}/>
+                </TouchableOpacity>
               </ListItem.Part>
             </ListItem>
         </Animatable.View>
@@ -141,7 +138,9 @@ export default class ListView extends Component {
         {this.state.mode === 'MAP' ? this.renderMap() : this.renderList()}
         <View style={{position:'absolute', bottom:20, right:20}}>
           <TouchableOpacity onPress={()=> {this.setState({mode: this.state.mode==='MAP' ? 'LIST': 'MAP'})}}>
-            <Image source={imageSrc} style={{height:30, width:30}}/>
+            <View style={{backgroundColor: mainColor, borderRadius: 30}}>
+              <Image source={imageSrc} style={{height:60, width:60}}/>
+            </View>
           </TouchableOpacity>
         </View>
       </View>
