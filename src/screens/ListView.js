@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, Alert, FlatList, TouchableOpacity, Image, Linking, SectionList} from 'react-native';
+import {
+  StyleSheet, 
+  Alert, 
+  FlatList, 
+  TouchableOpacity, 
+  Image, 
+  Linking, 
+  SectionList
+} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import {AnimatableManager, ThemeManager, Colors, BorderRadiuses, ListItem, Text, View, Button} from 'react-native-ui-lib'; //eslint-disable-line
 import MapScreen from './MapView';
@@ -7,11 +15,53 @@ const mapIcon = require('../../assets/mapIcon.png');
 const listIcon = require('../../assets/listIcon.png');
 import moment from 'moment';
 import {Navigation} from 'react-native-navigation';
+import _ from 'lodash'
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export const mainColor = '#397df6';
 
+const FILTERS = {
+  all: {
+    id: 'all',
+    label: 'All'
+  }, 
+  today: {
+    id: 'today',
+    label: 'Today'
+  }, 
+  tomorrow: {
+    id: 'tomorrow',
+    label: 'Tomorrow'
+  }, 
+  later: {
+    id: 'later',
+    label: 'Later'
+  }
+}
+
+const initialSections = [
+  {title: 'Today', data: []},
+  {title: 'Tomorrow', data: []},
+  {title: 'Later', data: []}
+]
+
 export default class ListView extends Component {
+  static options(passProps) {
+    return {
+      topBar: {
+        visible: true,
+        background: {
+          color: mainColor
+        },
+        backButton: {
+          // icon: require('icon.png'),
+          visible: true,
+          color: '#FFF'
+        },
+        noBorder: true
+      }
+    };
+  }
 
   constructor(props) {
     super(props);
@@ -19,21 +69,21 @@ export default class ListView extends Component {
     this.state = {
       onEdit: false,
       updating: false,
-      mode: 'LIST'
+      mode: 'LIST',
+      filter: FILTERS.all.id,
+      sections: this.getSections() || initialSections
     };
 
     this.getSections = this.getSections.bind(this)
     this.renderSectionHeader = this.renderSectionHeader.bind(this)
+    this.renderFilterButton = this.renderFilterButton.bind(this)
+    this.renderFlatList = this.renderFlatList.bind(this)
   }
 
   keyExtractor = (item,index) => index;
 
   getSections() {
-    let sections = [
-      {title: 'Today', data: []},
-      {title: 'Tomorrow', data: []},
-      {title: 'Later', data: []}
-    ]
+    let sections = _.cloneDeep(initialSections)
 
     this.props.services.forEach(s => {
       if (moment(s.nextAvailableSlot).format('l') === moment().format('l')) {
@@ -98,9 +148,61 @@ export default class ListView extends Component {
 
   renderSectionHeader({section: {title}}) {
     return (
-      <View style={{backgroundColor: '#FFF'}}>
-        <Text style={{fontWeight: 'bold'}}>{title}</Text>
+      <View style={{backgroundColor: '#f0f4f7', height: 23, justifyContent: 'center', paddingLeft: 20}}>
+        <Text style={{fontSize: 12}}>{title}</Text>
       </View>
+    )
+  }
+
+  renderSectionList() {
+    const {services, query} = this.props;
+    return (
+      <SectionList
+        // data={services}
+        sections={this.state.sections}
+        renderItem={({item, index}) => this.renderRow(item, index)}
+        keyExtractor={(item, index) => index.toString()}
+        renderSectionHeader={this.renderSectionHeader}
+      />
+    )
+  }
+
+  renderFlatList() {
+    return (
+      <FlatList
+        data={this.state.sections[_.keys(FILTERS).indexOf(this.state.filter) -1].data}
+        renderItem={({item, index}) => this.renderRow(item, index)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    )
+  }
+
+  setFilter = (filter) => {
+    this.setState({filter: FILTERS[filter].id})
+  }
+
+  renderFilterButton(filter, index) {
+    return (
+      <TouchableOpacity 
+        key={filter}
+        style={{
+          borderColor: '#FFF', 
+          borderWidth: 1, 
+          padding: 5, 
+          borderRadius: 15, 
+          paddingVertical: 6, 
+          paddingHorizontal: 10,
+          marginRight: _.values(FILTERS)[index + 1] ? 10 : 0,
+          backgroundColor: filter === this.state.filter ? '#fff' : undefined,
+        }}
+        onPress={() => this.setFilter(filter)}
+      >
+        <Text 
+          style={{color: filter === this.state.filter ? '#000' : '#fff'}}
+        >
+          {FILTERS[filter].label}
+        </Text>
+      </TouchableOpacity>
     )
   }
 
@@ -108,29 +210,46 @@ export default class ListView extends Component {
     const {services, query} = this.props;
     return (
       <View>
-        <View style={{backgroundColor: mainColor}}>
-          {/*<Icon name="search" color="#4F8EF7" />*/}
-          <Text color={'white'} text50 style={{margin:50}}>{`${query}`}</Text>
+        <View style={{backgroundColor: mainColor, paddingBottom: 20}}>
+          <View 
+            style={{
+              borderBottomWidth: 1, 
+              borderBottomColor: '#ffffff', 
+              marginHorizontal: 20, 
+              marginTop: 20, 
+              flexDirection: 'row', 
+              alignItems: 'center',
+              marginBottom: 25
+            }}
+          >
+            <View>
+              <Icon name='ios-search' color='#fff' size={20}/>
+            </View>
+            <Text style={{paddingVertical: 10, width: '100%', color: '#fff', marginLeft: 10}}>
+              {query}
+            </Text>
+          </View>
+          {/* <Text color={'white'} text50 style={{margin:50}}>{`${query}`}</Text> */}
+          <View row style={{paddingLeft: 20}}>
+            {_.keys(FILTERS).map(this.renderFilterButton)}
+          </View>
         </View>
-        <SectionList
-          // data={services}
-          sections={this.getSections()}
-          renderItem={({item, index}) => this.renderRow(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          renderSectionHeader={this.renderSectionHeader}
-        />
+
+        {this.state.filter === FILTERS.all.id
+          ? this.renderSectionList()
+          : this.renderFlatList()
+        }
       </View>
     )
   }
 
   renderMap() {
     return (
-        <MapScreen {...this.props}/>
+      <MapScreen {...this.props}/>
     )
   }
 
   render() {
-    console.log('this.props', this.props)
     const imageSrc = this.state.mode === 'MAP' ? listIcon : mapIcon;
 
     return (
