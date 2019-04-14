@@ -17,17 +17,6 @@ const title = 'What kind of\nservice are you\nlooking for?'
 
 export default class Home extends Component {
 
-  static get options() {
-    return {
-      topBar: {
-        visible: false,
-        title: {
-          text: 'Screen 2'
-        },
-      }
-    };
-  }
-
   constructor(props){
     super(props);
 
@@ -56,7 +45,7 @@ export default class Home extends Component {
   async handleSearch() {
     if (this.state.searchValue.length < 3) {
       return
-    } 
+    }
 
     const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue, this.state.searchRadius)
 
@@ -66,7 +55,7 @@ export default class Home extends Component {
     }
 
     const services = await helpers.getServicesList(businesses)
-    
+
     Navigation.push(this.props.componentId, {
       component: {
         name: 'ListView',
@@ -75,13 +64,6 @@ export default class Home extends Component {
           coords,
           query: this.state.searchValue,
           services
-        },
-        options: {
-          topBar: {
-            title: {
-              text: 'List View'
-            }
-          }
         }
       }
     });
@@ -111,7 +93,7 @@ export default class Home extends Component {
               style={{paddingVertical: 10, width: '100%', color: '#fff', marginLeft: 10}}
             />
           </View>
-          
+
         </View>
         <View flex>
           <MapView
@@ -129,7 +111,7 @@ export default class Home extends Component {
             }}
             // onRegionChangeComplete={this.handleRegionChangeComplete}
           >
-            {this.state.location && 
+            {this.state.location &&
             <Marker
               coordinate={{latitude: this.state.location.latitude, longitude: this.state.location.longitude}}
             />}

@@ -15,16 +15,6 @@ import * as helpers from '../helpers'
 
 export default class MapScreen extends Component {
 
-  static get options() {
-    return {
-      topBar: {
-        title: {
-          text: 'Screen 2'
-        },
-      }
-    };
-  }
-
   constructor(props){
     super(props);
 

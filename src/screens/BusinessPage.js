@@ -29,15 +29,15 @@ export default class MapScreen extends Component {
         <ListItem
           activeBackgroundColor={Colors.dark60}
           activeOpacity={0.3}
-          height={80}
+          height={70}
           containerStyle={{flex: 1}}
         >
           <ListItem.Part left column containerStyle={[styles.border, {paddingLeft: 17}]}>
             <Image source={{uri: row.imageUrl ? `https://static.wixstatic.com/media/${row.imageUrl}` : `https://static.wixstatic.com/media/${this.businessData.logoUrl}`}}
                    style={{width: 40, height:40, borderRadius: 20}}/>
           </ListItem.Part>
-          <ListItem.Part middle column containerStyle={[styles.border, {paddingLeft: 17, paddingRight: 17, paddingTop: 17}]}>
-            <Text dark10 text60 style={{flex: 1, marginRight: 10, fontWeight: '500'}} numberOfLines={1}>{row.name}</Text>
+          <ListItem.Part middle column containerStyle={[styles.border, {padding: 17}]}>
+            <Text dark10 text80 style={{flex: 1, marginRight: 10, fontWeight: '500'}} numberOfLines={1}>{row.name}</Text>
             <Text dark10 text80 style={{flex: 1, marginRight: 10}} numberOfLines={1}>{row.price}</Text>
           </ListItem.Part>
           <ListItem.Part right>
@@ -66,8 +66,8 @@ export default class MapScreen extends Component {
           initialRegion={{
             latitude: business.latitude,
             longitude: business.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           }}
           >
             <Marker
@@ -83,10 +83,10 @@ export default class MapScreen extends Component {
         </View>
 
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-          <Icon name='ios-call' size={30} style={{marginLeft: 40, marginRight: 40}}/>
+          <Icon name='ios-call' size={30} style={{marginLeft: 10, marginRight: 40}}/>
           <Icon name='ios-navigate' size={30} style={{marginRight: 40}}/>
           <TouchableOpacity onPress={() => {Linking.openURL(business.siteUrl)}}>
-            <Icon name='ios-at' size={30} style={{marginRight: 40}}/>
+            <Icon name='ios-globe' size={30} style={{marginRight: 40}}/>
           </TouchableOpacity>
           <Icon name='ios-share' size={30} style={{marginRight: 40}}/>
         </View>
