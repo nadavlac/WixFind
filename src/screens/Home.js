@@ -47,7 +47,7 @@ export default class Home extends Component {
       return
     }
 
-    const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue, this.state.searchRadius)
+    const {businesses, coords} = await helpers.searchBusinesses(this.state.searchValue, this.state.searchRadius, this.state.region)
 
     if (businesses.length === 0) {
       Alert.alert('no businesses found')
@@ -98,18 +98,12 @@ export default class Home extends Component {
         <View flex>
           <MapView
             style={styles.map}
-            zoomEnabled={false}
-            zoomTapEnabled={false}
-            zoomControlEnabled={false}
-            rotateEnabled={false}
-            scrollEnabled={false}
-            pitchEnabled={false}
             region={this.state.location && {
               ...this.state.location,
               latitudeDelta: .5,
               longitudeDelta: .5,
             }}
-            // onRegionChangeComplete={this.handleRegionChangeComplete}
+            onRegionChangeComplete={this.handleRegionChangeComplete}
           >
             {this.state.location &&
             <Marker

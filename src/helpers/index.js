@@ -69,18 +69,28 @@ export async function getServicesList(businesses) {
   return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )
 }
 
-export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS) {
+export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS, region) {
   return new Promise(async (resolve) => {
-    const location = await getLocation()
+    let longitude
+    let latitude
+    let coords = {}
+    
+    if (region) {
+      longitude = region.longitude
+      latitude = region.latitude
+    } else {
+      const location = await getLocation()
+      if (location.error) {
+        return
+      }
 
-    if (location.error) {
-      return
+      longitude = location.coords.longitude
+      latitude = location.coords.latitude
     }
-
-    const {coords} = location
+    coords = {longitude, latitude}
 
     const filteredBusinesses = businesses.filter(business => {
-      const distance = getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude)
+      const distance = getDistanceFromLatLonInKm(latitude, longitude, business.latitude, business.longitude)
       business['distanceFromUser'] = distance;
       if (business.latitude && business.longitude && business.name && distance < distanceRadius) {
         const searchWordsArray = searchValue.trim().toLowerCase().split(' ')
