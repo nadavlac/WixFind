@@ -37,7 +37,16 @@ export default class MapScreen extends Component {
 
   renderCallout(busi) {
     return (
-      <TouchableOpacity onPress={() => Linking.openURL(busi.siteUrl)}>
+      <TouchableOpacity onPress={() => {
+        Navigation.push(this.props.componentId, {
+          component: {
+            name: 'BusinessPage',
+            passProps: {
+              business: busi,
+            }
+          },
+        })
+      }}>
         <Text>{busi.name}</Text>
         {/*<Image source={{uri: `https://static.wixstatic.com/media/${busi.logoUrl}`}} style={{width: 20, height:20}}/>*/}
       </TouchableOpacity>
@@ -55,7 +64,6 @@ export default class MapScreen extends Component {
         <TouchableOpacity
           style={{backgroundColor: '#FBB'}}
           onPress={() => {
-            console.log('ON PRESS', Navigation)
             Navigation.push(this.props.componentId, {
               component: {
                 name: 'ListView',

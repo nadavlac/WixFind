@@ -75,9 +75,11 @@ export default class MapScreen extends Component {
             />
         </MapView>
         <View column>
+          {console.log('here')}
+          {console.log(business)}
           <Text dark10 text50 style={{marginLeft: 10, marginRight: 10, marginBottom: 6, marginTop: 10, fontWeight: '500'}} numberOfLines={1}>{business.name}</Text>
           <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{business.addressString}</Text>
-          <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{`${this.props.service.distanceFromUser.toFixed(2)} KM`}</Text>
+          <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 6}} numberOfLines={1}>{`${business.distanceFromUser.toFixed(2)} KM`}</Text>
         </View>
 
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>

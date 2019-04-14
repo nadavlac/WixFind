@@ -39,16 +39,16 @@ function deg2rad(deg) {
 
 export async function getServicesList(businesses) {
   const {coords} = await getLocation();
-  console.log('in get services list' + coords);
   let services = []
   businesses.forEach(business => {
+    const distanceFromUser = getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude);
     business.offerings.forEach(offer => {
       services.push({
         ...offer,
         nextAvailableSlot: moment().add((Math.floor(Math.random() * 100000) + 5), 'minutes'),
-        distanceFromUser: getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude),
+        distanceFromUser,
         business: {logoUrl: business.logoUrl, siteUrl: business.siteUrl, name: business.name, addressString: business.addressString, longitude: business.longitude,
-                  latitude: business.latitude, msId: business.msId}})
+                  latitude: business.latitude, msId: business.msId, distanceFromUser}})
     })
   });
   return services.sort((a,b) => (a.nextAvailableSlot - b.nextAvailableSlot) || (a.distanceFromUser - b.distanceFromUser) )
@@ -66,6 +66,7 @@ export function searchBusinesses(searchValue, distanceRadius = DISTANCE_RADIUS) 
 
     const filteredBusinesses = businesses.filter(business => {
       const distance = getDistanceFromLatLonInKm(coords.latitude, coords.longitude, business.latitude, business.longitude)
+      business['distanceFromUser'] = distance;
       if (business.latitude && business.longitude && business.name && distance < distanceRadius) {
         const searchWordsArray = searchValue.trim().toLowerCase().split(' ')
         let searchString = business.name

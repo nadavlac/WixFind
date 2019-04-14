@@ -38,9 +38,7 @@ export default class ListView extends Component {
                   component: {
                     name: 'BusinessPage',
                     passProps: {
-                      service: row,
                       business: row.business,
-                      all: this.props
                     }
                   },
                 })
