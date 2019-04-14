@@ -16,6 +16,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const title = 'What kind of\nservice are you\nlooking for?'
 
 export default class Home extends Component {
+  static options(passProps) {
+    return {
+      topBar: {
+        visible: false,
+      }
+    };
+  }
 
   constructor(props){
     super(props);
@@ -24,13 +31,14 @@ export default class Home extends Component {
       searchValue: '',
       searchRadius: DISTANCE_RADIUS,
       location: null,
-      region: null
+      region: null,
+      currentAddress: ''
     }
 
     this.handleChangeText = this.handleChangeText.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleValueChange = _.debounce(this.handleValueChange.bind(this), 200)
-    this.handleRegionChangeComplete = this.handleRegionChangeComplete.bind(this)
+    this.handleRegionChangeComplete = _.debounce(this.handleRegionChangeComplete.bind(this), 200)
   }
 
   async componentDidMount() {
@@ -73,7 +81,27 @@ export default class Home extends Component {
     this.setState({searchRadius: Math.round(value)})
   }
 
+  getCurrentRequestedAddress = (region) => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${region.latitude},${region.longitude}&key=AIzaSyB0bxLdlOvJKWfVjLlcuDJ81WypLKSTEy4`)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.results) {
+          this.setState({
+            currentAddress: responseJson.results[1] 
+              ? responseJson.results[1].formatted_address 
+              : responseJson.results[0] 
+                ? responseJson.results[0].formatted_address 
+                : ''
+          })
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   handleRegionChangeComplete(region) {
+    this.getCurrentRequestedAddress(region)
     this.setState({region, location: {latitude: region.latitude, longitude: region.longitude}})
   }
 
@@ -91,7 +119,13 @@ export default class Home extends Component {
             <TextInput
               onChangeText={this.handleChangeText}
               style={{paddingVertical: 10, width: '100%', color: '#fff', marginLeft: 10}}
+              value={this.state.searchValue}
+              placeholder='Search'
+              placeholderTextColor='#fff'
             />
+          </View>
+          <View style={{paddingLeft: 20, paddingTop: 10}}>
+            <Text style={{color: '#FFF'}}>{this.state.currentAddress}</Text>
           </View>
 
         </View>
