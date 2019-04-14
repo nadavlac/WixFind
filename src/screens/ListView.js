@@ -44,7 +44,7 @@ export default class ListView extends Component {
         sections[2].data.push(s)
       }
     })
-    
+
     return sections
   }
 
@@ -70,8 +70,8 @@ export default class ListView extends Component {
             >
               <ListItem.Part left column containerStyle={[styles.border, {paddingRight: 17, paddingLeft: 10}]}>
                 <Text dark10 text100 numberOfLines={1} style={{ marginBottom: 3}}>{moment(row.nextAvailableSlot).format('DD/MM')}</Text>
-                <Text dark10 text100 numberOfLines={1} style={{ marginBottom: 3}}>{moment(row.nextAvailableSlot).format('ddd')}</Text>
-                <Text dark10 text100 numberOfLines={1}>{moment(row.nextAvailableSlot).format('h:mm')}</Text>
+                {/*<Text dark10 text100 numberOfLines={1} style={{ marginBottom: 3}}>{moment(row.nextAvailableSlot).format('ddd')}</Text>*/}
+                <Text dark10 text100 numberOfLines={1}>{`${moment(row.nextAvailableSlot).format('h:mm')} PM`}</Text>
               </ListItem.Part>
               <ListItem.Part middle containerStyle={[styles.border, {paddingRight: 17}]}>
                 <ListItem.Part containerStyle={{marginBottom: 3}}>
@@ -79,10 +79,10 @@ export default class ListView extends Component {
                          style={{width: 30, height:30, borderRadius: 15}}/>
                 </ListItem.Part>
                 <ListItem.Part column containerStyle={[styles.border, {paddingRight: 17, paddingLeft: 17, marginTop:10, flex: 1} ]}>
-                  <Text color={'black'} text90 style={{flex: 1, marginRight: 10}} numberOfLines={1}>{row.name}</Text>
-                  <Text dark10 text60 style={{flex: 1, marginRight: 10, fontWeight: '500'}} numberOfLines={1}>{row.business.name}</Text>
+                  <Text color={'black'} text90 style={{flex: 1, marginRight: 10, marginBottom: -7}} numberOfLines={1}>{row.business.name}</Text>
+                  <Text dark10 text60 style={{flex: 1, marginRight: 10, fontWeight: '500'}} numberOfLines={1}>{row.name}</Text>
                   <Text dark10 text90 style={{flex: 1, marginRight: 10}} numberOfLines={1}>{row.business.addressString}</Text>
-                  <Text dark10 text90 style={{flex: 1, marginRight: 10}} numberOfLines={1}>{`${row.distanceFromUser.toFixed(2)} KM`}</Text>
+                  <Text dark10 text90 style={{flex: 1, marginRight: 10, marginTop: -5}} numberOfLines={1}>{`${row.distanceFromUser.toFixed(2)} km`}</Text>
                 </ListItem.Part>
               </ListItem.Part>
               <ListItem.Part right>
