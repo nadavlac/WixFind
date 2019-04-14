@@ -19,11 +19,15 @@ export default class MapScreen extends Component {
 
   constructor(props){
     super(props);
+    this.renderRow = this.renderRow.bind(this)
   }
 
   businessData = businessMap[this.props.business.msId];
 
-  renderRow(row, id) {
+  renderRow({item, index}) {
+    const row = item 
+    const id = index
+
     return (
       <View flex>
         <ListItem
@@ -61,7 +65,6 @@ export default class MapScreen extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <MapView
-          // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
           initialRegion={{
             latitude: business.latitude,
@@ -74,9 +77,8 @@ export default class MapScreen extends Component {
               coordinate={{latitude: business.latitude, longitude:business.longitude}}
             />
         </MapView>
-        <View style={{marginLeft: 20}}>
+        <View style={{marginLeft: 20, flex: 1}}>
           <View column >
-
             <Text dark10 text50 style={{marginLeft: 10, marginRight: 10, marginBottom: 6, marginTop: 20, fontWeight: '500'}} numberOfLines={1}>{business.name}</Text>
             <Text dark10 text90 style={{marginLeft: 10, marginRight: 10}} numberOfLines={1}>{business.addressString}</Text>
             <Text dark10 text90 style={{marginLeft: 10, marginRight: 10,  marginBottom: 15}} numberOfLines={1}>{`${business.distanceFromUser.toFixed(2)} KM`}</Text>
@@ -90,16 +92,18 @@ export default class MapScreen extends Component {
             </TouchableOpacity>
             <Icon name='ios-share' size={30} style={{marginRight: 40}}/>
           </View>
-        <View>
-          <View style={{ borderBottomWidth:styles.border.borderBottomWidth, borderBottomColor: styles.border.borderColor}}>
-            <Text dark10 text70 style={{marginLeft: 10, marginRight: 10, marginBottom: 25, marginTop: 40, fontWeight: '500'}}>All Services</Text>
+          <View style={{flex: 1}}>
+            <View style={{ borderBottomWidth:styles.border.borderBottomWidth, borderBottomColor: styles.border.borderColor}}>
+              <Text dark10 text70 style={{marginLeft: 10, marginRight: 10, marginBottom: 25, marginTop: 40, fontWeight: '500'}}>All Services</Text>
+            </View>
+            <View flex style={{}}>
+              <FlatList
+                data={this.businessData.offerings}
+                renderItem={this.renderRow}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
           </View>
-            <FlatList
-            data={this.businessData.offerings}
-            renderItem={({item, index}) => this.renderRow(item, index)}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
         </View>
       </SafeAreaView>
     );
